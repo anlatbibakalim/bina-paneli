@@ -1,5 +1,4 @@
 {
-  "id": "./index.html",
   "name": "Bina Yönetim Paneli",
   "short_name": "Bina Paneli",
   "description": "Apartman/Site yönetimi için gelir-gider ve finansal yönetim uygulaması",
@@ -11,6 +10,6 @@
   "theme_color": "#0ea5e9",
   "icons": [
     { "src": "bina-ikon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "bina-ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    { "src": "bina-ikon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }

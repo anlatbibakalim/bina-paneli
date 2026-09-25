@@ -950,6 +950,19 @@ window.onerror=function(msg,src,line){
 (function(){
   var el=document.documentElement;
   if(UI.theme==="dark")el.classList.add("dark");else el.classList.remove("dark");
+  // Eski surum kalmalarini temizle
+  try{
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(rs){
+        rs.forEach(function(r){ if(r.active&&r.active.scriptURL.indexOf("sw.js")>=0&&!r.active.scriptURL.indexOf("v3")&&!window.__keepSW){ /* guncel sw birak */ } });
+      });
+    }
+    if("caches" in window){
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ if(k.indexOf("bina-panel")===0&&k!=="bina-panel-v3"){ caches.delete(k); } });
+      });
+    }
+  }catch(e){}
   render();
 })();
 </script>
