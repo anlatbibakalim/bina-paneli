@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Bina Paneli"/>
 <link rel="apple-touch-icon" href="bina-ikon.png"/>
 <title>Bina Yönetim Paneli</title>
+<link rel="manifest" href="manifest.json"/>
 <style>
 :root{
   --bg:#eef2f7; --card:rgba(255,255,255,.88); --border:rgba(203,213,225,.9); --border2:rgba(226,232,240,.8);
@@ -444,7 +445,7 @@ function render(){
         '<select onchange="A.setYil(this.value)">'+[2024,2025,2026,2027,2028].map(function(y){return '<option '+(y===S.settings.yil?"selected":"")+'>'+y+'</option>';}).join("")+'</select>'+
       '</div>'+
       '<button class="btn b-violet" onclick="A.openDevir()">'+ic("landmark")+'Devir Kasa</button>'+
-      '<button class="iconbtn" onclick="A.toggleTheme()" title="Tema değiştir">'+ic(UI.theme==="dark"?"sun":"moon")+'</button>'+
+      '<button id="installBtn" class="btn b-emerald" onclick="A.install()" title="Uygulamayı kur">&#128241; Kur</button>\n    <button class="iconbtn" onclick="A.toggleTheme()" title="Tema değiştir">'+ic(UI.theme==="dark"?"sun":"moon")+'</button>'+
       '<button class="btn b-ghost b-xs" onclick="A.demo()">'+ic("sparkles","ic-sm")+'Demo Veri</button>'+
       '<button class="btn b-rose b-xs" onclick="A.reset()">'+ic("reset","ic-sm")+'Sıfırla</button>'+
     '</div></div></header>';
@@ -726,6 +727,14 @@ var A={
     if(k==="iq"||k==="eq"){var el=document.getElementById(k==="iq"?"f-iq":"f-eq"); if(el){el.focus();var n=el.value.length; try{el.setSelectionRange(n,n);}catch(e){}}}},
   afset:function(k){UI.afilter=k;render();},
   close:function(){closeModal();},
+  install:function(){
+    if(__bip){var p=__bip;__bip=null;p.prompt();p.userChoice.then(function(r){showToast(r.outcome==="accepted"?"Uygulama kuruluyor...":"Kurulum iptal edildi.");});return;}
+    if(!("serviceWorker" in navigator)){alert("Tarayıcınız kurulumu desteklemiyor. Chrome'u güncelleyin.");return;}
+    navigator.serviceWorker.getRegistration().then(function(reg){
+      var m=document.querySelector('link[rel="manifest"]');
+      alert("KURULUM KONTROL\u00dc\n\nService Worker: "+(reg&&reg.active?"AKT\u0130F \u2713":"YOK \u2014 sayfay\u0131 bir kez yenileyip 10 sn bekleyin")+"\nManifest ba\u011flant\u0131s\u0131: "+(m?"VAR \u2713":"YOK")+"\n\n\u0130kisi de tamamsa Chrome \u00fcn \u22ee men\u00fcs\u00fcnden \u201eY\u00fckle\u201c se\u00e7ene\u011fini kullan\u0131n.");
+    });
+  },
 
   yansit:function(){S.settings.aidatAylari[getMK()]=1500;persist();showToast("Bu ay tüm dairelere aidat borcu yansıtıldı.");render();},
   unyansit:function(){ if(!confirm("Bu ay için aidat yansıtması geri alınsın mı?"))return; delete S.settings.aidatAylari[getMK()]; persist(); showToast("Aidat yansıtması geri alındı."); render(); },
@@ -931,6 +940,8 @@ var A={
 };
 
 /* ================= BAŞLAT ================= */
+var __bip=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();__bip=e;var b=document.getElementById("installBtn");if(b){b.style.display="inline-flex";}});
 window.onerror=function(msg,src,line){
   var a=document.getElementById("app");
   if(a){a.innerHTML='<div style="padding:40px 20px;font-family:Arial;color:#b91c1c;max-width:600px;margin:0 auto"><b>Bir hata oluştu:</b><br>'+String(msg)+'<br><span style="color:#64748b;font-size:13px">Satır '+line+' — lütfen bu mesajı iletin.</span></div>';}
@@ -942,7 +953,6 @@ window.onerror=function(msg,src,line){
   render();
 })();
 </script>
-<link rel="manifest" href="manifest.json"/>
 <script>
 if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
   window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
