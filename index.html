@@ -704,13 +704,7 @@ function printHTML(title,body){
   '<style>body{font-family:Arial,Helvetica,sans-serif;padding:32px;color:#111;font-size:13px}h1{font-size:20px;margin:0}h2{font-size:14px;margin:18px 0 8px;border-bottom:2px solid #333;padding-bottom:4px}'+
   'table{width:100%;border-collapse:collapse;margin-top:6px}th,td{border:1px solid #999;padding:6px 8px;text-align:left}th{background:#eee}'+
   '.r{text-align:right}.tot{font-weight:bold;background:#f5f5f5}.muted{color:#666}.row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px}</style></head><body>'+body+
-  '<script>window.onload=function(){setTimeout(function(){window.print();},350);};<\/script><link rel="manifest" href="manifest.webmanifest"/>
-<script>
-if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
-  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
-}
-</script>
-</body></html>');
+  '<script>window.onload=function(){setTimeout(function(){window.print();},350);};<\/script></body></html>');
   w.document.close();
 }
 function downloadCSV(name,rows){
@@ -947,6 +941,12 @@ window.onerror=function(msg,src,line){
   if(UI.theme==="dark")el.classList.add("dark");else el.classList.remove("dark");
   render();
 })();
+</script>
+<link rel="manifest" href="manifest.webmanifest"/>
+<script>
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
+}
 </script>
 </body>
 </html>
