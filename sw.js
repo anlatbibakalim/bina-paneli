@@ -1,4 +1,4 @@
-var CACHE="bina-panel-v3";
+var CACHE="bina-panel-v4";
 var ASSETS=["./","./index.html","./manifest.json","./bina-ikon-192.png","./bina-ikon-512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(ASSETS);}).then(function(){self.skipWaiting();}));
